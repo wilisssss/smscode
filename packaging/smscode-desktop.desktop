@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=SMSCode Desktop
+GenericName=Virtual Number & OTP Client
+Comment=Beli nomor virtual dan terima kode OTP/SMS via SMSCode
+Exec=smscode-desktop
+Icon=smscode-desktop
+Type=Application
+StartupNotify=true
+StartupWMClass=smscode-desktop
+Categories=Network;
+Keywords=sms;otp;smscode;virtual number;verifikasi;
+Terminal=false

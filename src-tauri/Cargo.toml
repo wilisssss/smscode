@@ -1,0 +1,42 @@
+[package]
+name = "smscode-desktop"
+version = "1.4.1"
+edition = "2021"
+rust-version = "1.77.2"
+description = "Klien desktop pribadi untuk membeli nomor virtual dan menerima kode OTP/SMS via SMSCode"
+authors = ["Adip Perdana"]
+license = "MIT"
+
+[lib]
+name = "smscode_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[features]
+# Wajib untuk production build (template resmi Tauri menandainya "DO NOT REMOVE!!"):
+# tanpa ini webview memuat devUrl (http://localhost:1420) dan gagal saat normal dijalankan.
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-notification = "2"
+# Di Android crate ini kosong (seluruh isinya `#![cfg(not(android/ios))]`),
+# jadi inisialisasinya di-gate `cfg(desktop)` di lib.rs.
+tauri-plugin-autostart = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-clipboard-manager = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["sync", "time", "macros"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+keyring = "4"
+
+[profile.release]
+# Fat LTO membuat simbol assembly milik `ring` (dependensi TLS) tidak ikut ter-link
+# — gunakan thin LTO yang aman, tetap kecil & cepat.
+lto = "thin"
+codegen-units = 16
+strip = true

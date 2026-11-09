@@ -1,0 +1,9 @@
+node_modules/
+dist/
+src-tauri/target/
+src-tauri/gen/
+*.pkg.tar.zst
+*.tar.gz
+packaging/src/
+packaging/pkg/
+.DS_Store

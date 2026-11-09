@@ -1,0 +1,49 @@
+# Maintainer: Adip Perdana
+# Build dari source:  npm run build (frontend) + cargo build --release
+# Hasil: smscode-desktop-<pkgver>-1-x86_64.pkg.tar.zst  →  sudo pacman -U …
+pkgname=smscode-desktop
+pkgver=1.4.1
+pkgrel=1
+pkgdesc='Klien desktop pribadi untuk membeli nomor virtual dan menerima kode OTP/SMS via SMSCode'
+arch=('x86_64')
+url='https://smscode.gg/docs'
+license=('MIT')
+depends=('gtk3' 'webkit2gtk-4.1' 'libsoup3' 'hicolor-icon-theme')
+makedepends=('rust' 'cargo' 'nodejs' 'npm' 'pkgconf' 'webkit2gtk-4.1' 'gtk3')
+optdepends=(
+  'gnome-keyring: menyimpan token API secara aman (Secret Service)'
+  'libnotify: banner notifikasi desktop saat OTP masuk'
+)
+source=("$pkgname-$pkgver.tar.gz")
+sha256sums=('14a92da2f935b48b77c25ccb88538977ea2fc55a360630a5a454c44ae4b6382c')
+
+# Opsi `lto` bawaan Arch menambahkan -flto=auto ke CFLAGS/LDFLAGS → objek C milik
+# ring (dependensi rustls) menjadi slim GCC LTO bytecode tanpa simbol native,
+# sehingga link LLVM gagal: undefined symbol ring_core_0_17_14__*.
+# Matikan LTO untuk paket ini.
+options=('!lto' '!debug')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  npm ci --no-audit --no-fund
+  npm run build
+
+  cd src-tauri
+  cargo build --release --locked
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -Dm755 src-tauri/target/release/smscode-desktop "$pkgdir/usr/bin/smscode-desktop"
+  install -Dm644 packaging/smscode-desktop.desktop "$pkgdir/usr/share/applications/smscode-desktop.desktop"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 CHANGELOG.md "$pkgdir/usr/share/doc/$pkgname/CHANGELOG.md"
+
+  install -Dm644 src-tauri/icons/32x32.png        "$pkgdir/usr/share/icons/hicolor/32x32/apps/smscode-desktop.png"
+  install -Dm644 src-tauri/icons/128x128.png      "$pkgdir/usr/share/icons/hicolor/128x128/apps/smscode-desktop.png"
+  install -Dm644 src-tauri/icons/128x128@2x.png   "$pkgdir/usr/share/icons/hicolor/256x256/apps/smscode-desktop.png"
+  install -Dm644 src-tauri/icons/icon.png         "$pkgdir/usr/share/icons/hicolor/512x512/apps/smscode-desktop.png"
+}

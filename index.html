@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <title>SMSCode Desktop</title>
+    <script>
+      // Hindari flash (FOUC) sebelum CSS dimuat: terapkan tema dari localStorage SEKARANG.
+      try {
+        var raw = localStorage.getItem('smscode-prefs');
+        var theme = raw ? (JSON.parse(raw).theme || 'dark') : 'dark';
+        var isDark =
+          theme === 'dark' ||
+          (theme === 'system' && !window.matchMedia('(prefers-color-scheme: light)').matches);
+        document.documentElement.classList.toggle('dark', isDark);
+      } catch (e) { /* localStorage diblokir — fallback gelap */ }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

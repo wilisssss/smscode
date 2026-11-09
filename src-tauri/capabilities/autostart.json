@@ -1,0 +1,16 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "autostart",
+  "description": "Plugin autostart hanya ada di desktop (crate kosong di Android/iOS), jadi izinnya dipisah per platform.",
+  "platforms": [
+    "linux",
+    "windows",
+    "macOS"
+  ],
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "autostart:default"
+  ]
+}

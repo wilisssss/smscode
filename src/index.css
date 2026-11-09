@@ -1,0 +1,185 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* JetBrains Mono Nerd Font (OFL) — dibundel agar tampilan identik di Arch & Android. */
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('./assets/fonts/JetBrainsMonoNerdFont-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('./assets/fonts/JetBrainsMonoNerdFont-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('./assets/fonts/JetBrainsMonoNerdFont-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('./assets/fonts/JetBrainsMonoNerdFont-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans:
+    'JetBrainsMono Nerd Font', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo,
+    monospace;
+  --font-mono:
+    'JetBrainsMono Nerd Font', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo,
+    monospace;
+
+  /* Ukuran font global +1px (line-height default tetap proporsional) */
+  --text-xs: 13px;
+  --text-sm: 15px;
+  --text-base: 17px;
+  --text-lg: 19px;
+  --text-xl: 21px;
+  --text-2xl: 25px;
+  --text-3xl: 31px;
+  --text-4xl: 37px;
+}
+
+/* ── Tema: gelap (default) ─────────────────────────────────────────────── */
+:root,
+html.dark {
+  --color-surface: #0b1120;
+  --color-panel: #101a30;
+  --color-panel-2: #16203c;
+  --color-line: rgba(148, 163, 184, 0.12);
+  --color-line-strong: rgba(148, 163, 184, 0.24);
+  --color-text: #e2e8f0;
+  --color-muted: #8b98b3;
+  --color-brand: #6366f1;
+  --color-brand-strong: #818cf8;
+  --color-ok: #34d399;
+  --color-warn: #fbbf24;
+  --color-danger: #fb7185;
+  --shadow-card: 0 10px 30px rgba(2, 6, 23, 0.35);
+  color-scheme: dark;
+}
+
+/* ── Tema: terang ───────────────────────────────────────────────────────── */
+html:not(.dark) {
+  --color-surface: #eef1f8;
+  --color-panel: #ffffff;
+  --color-panel-2: #e7ebf6;
+  --color-line: rgba(15, 23, 42, 0.1);
+  --color-line-strong: rgba(15, 23, 42, 0.2);
+  --color-text: #0f172a;
+  --color-muted: #5b6b8c;
+  --color-brand: #4f46e5;
+  --color-brand-strong: #6366f1;
+  --color-ok: #059669;
+  --color-warn: #d97706;
+  --color-danger: #e11d48;
+  --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.08);
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  /* Matikan ligatur agar isi SMS/OTP tampil persis seperti aslinya. */
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* jendela OS yang punya scroll; pane konten scroll sendiri */
+}
+
+/* Scrollbar halus */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 8px;
+}
+
+/* Latar aurora halus di belakang konten */
+.app-bg {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(99, 102, 241, 0.16), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(52, 211, 153, 0.08), transparent 55%),
+    var(--color-surface);
+}
+html:not(.dark) .app-bg {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+    var(--color-surface);
+}
+
+.card {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+}
+
+.card-hover {
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-line-strong);
+}
+
+.text-muted {
+  color: var(--color-muted);
+}
+
+.border-line {
+  border-color: var(--color-line);
+}
+
+.focus-ring:focus-visible,
+:is(button, a, input, select, textarea):focus-visible {
+  outline: 2px solid var(--color-brand-strong);
+  outline-offset: 2px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.1) 25%,
+    rgba(148, 163, 184, 0.22) 37%,
+    rgba(148, 163, 184, 0.1) 63%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 0.75rem;
+}
